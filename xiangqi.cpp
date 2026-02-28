@@ -5,6 +5,7 @@
 #include <chrono>
 #include <random>
 #include <iomanip> // setprecision ?
+#include <array>
 
 using namespace std;
 
@@ -99,46 +100,46 @@ namespace library{
 ︶　
 */
 
-    string YOU_WIN="\n\x1b[33m\x1b[1m  ==  YOU WIN  ==  \x1b[39m\x1b[0m";
-    string YOU_LOSE="\n\x1b[34m\x1b[1m  ==  YOU LOSE  ==  \x1b[39m\x1b[0m";
+    const string YOU_WIN="\n\x1b[33m\x1b[1m  ==  YOU WIN  ==  \x1b[39m\x1b[0m";
+    const string YOU_LOSE="\n\x1b[34m\x1b[1m  ==  YOU LOSE  ==  \x1b[39m\x1b[0m";
 
-const u32string output_board=U"\033[90m"s+
-U"　　　１　２　３　４　５　６　７　８　９ (Ｘ座標)\n"s+
-U"\n"s+
-U"　０　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"　　　｜　｜　｜　｜＼｜／｜　｜　｜　｜\n"s+
-U"　１　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"　　　｜　｜　｜　｜／｜＼｜　｜　｜　｜\n"s+
-U"　２　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"s+
-U"　３　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"s+
-U"　４　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"　　　｜　　　　楚河　　　漢界　　　　｜\n"s+
-U"　５　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"s+
-U"　６　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"s+
-U"　７　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"︵　　｜　｜　｜　｜＼｜／｜　｜　｜　｜\n"s+
-U"Ｙ８　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"s+
-U"座　　｜　｜　｜　｜／｜＼｜　｜　｜　｜\n"s+
-U"標９　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋\n"s+
-U"︶　\033[0m\n"s;
+const u32string output_board=U"\033[90m"
+U"　　　１　２　３　４　５　６　７　８　９ (Ｘ座標)\n"
+U"\n"
+U"　０　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"　　　｜　｜　｜　｜＼｜／｜　｜　｜　｜\n"
+U"　１　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"　　　｜　｜　｜　｜／｜＼｜　｜　｜　｜\n"
+U"　２　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"
+U"　３　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"
+U"　４　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"　　　｜　　　　楚河　　　漢界　　　　｜\n"
+U"　５　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"
+U"　６　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"　　　｜　｜　｜　｜　｜　｜　｜　｜　｜\n"
+U"　７　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"︵　　｜　｜　｜　｜＼｜／｜　｜　｜　｜\n"
+U"Ｙ８　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー次\n"
+U"座　　｜　｜　｜　｜／｜＼｜　｜　｜　｜\n"
+U"標９　＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋ー＋\n"
+U"︶　\033[0m\n";
 
 
 const string Initial_board=
-    "WXXXXXXXXX"s + "X" +
-    "XrheagaehrX"+ // 0行目: 黒陣
-    "X.........X"+ // 1行目
-    "X.c.....c.X"+ // 2行目
-    "Xs.s.s.s.sX"+ // 3行目
-    "X.........X"+ // 4行目: 楚河
-    "X.........X"+ // 5行目: 漢界
-    "XS.S.S.S.SX"+ // 6行目
-    "X.C.....C.X"+ // 7行目
-    "X.........X"+ // 8行目
-    "XRHEAGAEHRX"+ // 9行目: 紅陣
+    "WXXXXXXXXXX" 
+    "XrheagaehrX" // 0行目: 黒陣
+    "X.........X" // 1行目
+    "X.c.....c.X" // 2行目
+    "Xs.s.s.s.sX" // 3行目
+    "X.........X" // 4行目: 楚河
+    "X.........X" // 5行目: 漢界
+    "XS.S.S.S.SX" // 6行目
+    "X.C.....C.X" // 7行目
+    "X.........X" // 8行目
+    "XRHEAGAEHRX" // 9行目: 紅陣
     "XXXXXXXXXXX";
 /*盤の周囲は壁で囲い、Xで表す
   左上の文字は手番を表し、'W'なら紅(先手、大文字)を示す、'b'なら黒(後手、小文字)を示す
@@ -146,14 +147,14 @@ const string Initial_board=
   */
 
   //経由地点と目標地点のペア
-    vector<pair<int,int>> Xiang_move={{1+W,2+2*W},{1-W,2-2*W},{-1+W,-2+2*W},{-1-W,-2-2*W}};
-    vector<pair<int,int>> Ma_move={{1,2+W},{1,2-W},{-1,-2+W},{-1,-2-W},{-W,-2*W+1},{-W,-2*W-1},{W,2*W+1},{W,2*W-1}};
-    vector<int> Upper_Shi_move={W+4,W+6,3*W+4,3*W+6};
-    vector<int> Lower_Shi_move={8*W+4,8*W+6,10*W+4,10*W+6};
-    vector<int> King_move={1,-1,W,-W};
+    constexpr array<pair<int,int>, 4> Xiang_move={{{1+W,2+2*W},{1-W,2-2*W},{-1+W,-2+2*W},{-1-W,-2-2*W}}};
+    constexpr array<pair<int,int>, 8> Ma_move={{{1,2+W},{1,2-W},{-1,-2+W},{-1,-2-W},{-W,-2*W+1},{-W,-2*W-1},{W,2*W+1},{W,2*W-1}}};
+    constexpr array<int,4> Upper_Shi_move={{W+4,W+6,3*W+4,3*W+6}};
+    constexpr array<int,4> Lower_Shi_move={{8*W+4,8*W+6,10*W+4,10*W+6}};
+    constexpr array<int,4> King_move={{1,-1,W,-W}};
 
     bool is_in_casle(int a){
-        return (a<4*W || 8*W<a) &&  a%W<<7 && 3<a%W;
+        return (a<4*W || 8*W<a) &&  a%W<7 && 3<a%W;
     }
 
     
@@ -334,11 +335,10 @@ vector<move_t> f_all_options(const string &board){
                     }
                 }
             }else if(piece=='G' || piece=='g'){//将
-                int next=now+1;
                 if(now%W<6)Targets.push_back(now+1);
                 if(4<now%W)Targets.push_back(now-1);
-                if(now<3*W)Targets.push_back(now+W);
-                if(8*W<now)Targets.push_back(now-W);
+                if(now/W!=3)Targets.push_back(now+W);
+                if(now/W!=7)Targets.push_back(now-W);
             }else if(piece=='C' || piece=='c'){//砲
                 bool b=true;//まだ駒を飛び越えていない
                 for(int next=now+1;next%W<W-1;next++){
@@ -408,7 +408,6 @@ vector<move_t> f_all_options(const string &board){
     }
     return ans;
 }
-
 
 move_t solve(string board){
     vector<move_t> options=f_all_options(board);
